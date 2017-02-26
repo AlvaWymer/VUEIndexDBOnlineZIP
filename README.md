@@ -1,0 +1,2 @@
+# VUEIndexDBOnlineZIP
+VUE配合indexDB在线预览zip压缩文件
