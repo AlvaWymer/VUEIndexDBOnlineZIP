@@ -1,0 +1,75 @@
+// .file_list_review{
+//   border: 1px solid #E6E6FA;
+//   .file_list_first {
+//     height: 54px; width: 100%; background: #B0C4DE; display: block;
+//     h3 {
+//       line-height: 54px; height: 54px; margin-left: 20px;
+//     }
+//   }
+//   .file_list_other {
+//     line-height: 45px; height: 45px; width: 100%; background: #FAFAD2; margin: 8px 0; border-top: 1px solid #E6E6FA;
+//     label {
+//       display: block; line-height: 45px; height: 45px; width: 45px; float: left; text-align: center;
+//     }
+//     span {
+//       .file-icon {
+//         display: block; float: left; width: 64px; height: 41px; margin: 2px auto;
+//       }
+//     }
+//   }
+//   .file_infor {
+//     .file_breadcrumb {
+//       line-height: 20px; height: 20px; float: right; display: block; background: #DCDCDC; margin: 5px; padding: 5px; font-size: 12px
+//     }
+//     .file_content {
+//
+//     }
+//   }
+// }
+.file_review {
+  border: 1px solid $cee;border-radius: 5px;box-shadow: 1px 1px 5px $cee;position: relative;
+  h3 {
+    @include jb(#E8E6E8,#DAD9DA,0);height: 32px;line-height: 32px;text-align: center;position: relative;
+    box-shadow: 0 0 0 1px rgba($cff,.4) inset;border-radius: 5px 5px 0 0;font-size: 13px;color: $c22;
+    &:after {
+      display: block;content: "";position: absolute;height: 12px;width: 12px;background: $red;border-radius: 50%;
+      left: 15px;top: 10px;
+      box-shadow: 20px 0 #FFBC44, 40px 0 $green;
+    }
+  }
+  .file_breadcrumb {
+    position: absolute;right: 15px;top: 5px;font-size: 12px;color: $c99;text-shadow: 1px 1px 0 $cff;
+    @include oneline(24px);
+  }
+  i {
+    display: block;width: 100px;height: 100px;margin: 0 auto;
+    &.icon_photo {background:url($static+"/image/icon_photo.png") 0 0 no-repeat;}
+    &.icon_excel {background:url($static+"/image/icon_excel.png") 0 0 no-repeat;}
+    &.icon_finder {background:url($static+"/image/icon_finder.png") 0 0 no-repeat;}
+    &.icon_errorfile {background:url($static+"/image/icon_errorfile.png") 0 0 no-repeat;}
+  }
+  ul {
+    @extend .cf;padding: 10px;min-height: 200px;
+    li {
+      float: left;padding: 8px;width: 100px;border-radius: 8px;margin: 8px;
+      &.on {background: rgba($c22,.1);}
+      span {
+        display: block;font-size: 12px;color: $c22;
+        @include oneline(24px);text-align: center;
+      }
+    }
+  }
+  .review_box {
+    padding: 20px;min-height: 200px;
+    img {
+      display: block;margin: 50px auto;border-radius: 8px;box-shadow: 0 0 0 5px $cff,0 0 20px $c22;
+    }
+    .excel_review {
+      margin: 50px auto;text-align: center;
+      em {
+        display: block;font-size: 12px;color: $c22;
+        @include oneline(24px);text-align: center;
+      }
+    }
+  }
+}
