@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading="loading" element-loading-text="拼命加载中">
     <!-- top -->
     <section class="admin_tool">
       <div class="admin_tool_btn">
@@ -49,20 +49,20 @@ export default {
       zipfile_index: {},
       file_obj: {},
       nonsupport_indexdb: false,
-      imgUrlArr: null
+      imgUrlArr: null,
+      loading: true,
+      judgeloaded: 0
     }
   },
   created () {
     window.onunload = function () { // 关闭页面时设定判断关闭加载为true，同时删除数据库
       window.localStorage.judgeCloseLoadIndexDB = true
-      // var indexDB = window.indexedDB
-      // indexDB.deleteDatabase('kangruideIndexDB')
     }
     var indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.msIndexedDB
 
     if (indexedDB) {
       this.nonsupport_indexdb = false
-      if (window.localStorage.judgeCloseLoadIndexDB) {
+      if (window.localStorage.judgeCloseLoadIndexDB === 'true') {
         this.getBaseData()
       } else {
         var indexDB = window.indexedDB
@@ -74,6 +74,7 @@ export default {
           if (objectStoreNames.indexOf('upload_review') !== -1) {
             this.file_obj = JSON.parse(window.localStorage.file_obj)
             this.zipfile_index = JSON.parse(window.localStorage.zipfile_index) // 存储文件在数组中的索引对象
+            this.loading = false
           } else {
             this.getBaseData()
           }
@@ -92,10 +93,16 @@ export default {
       })
     }
   },
+  watch: {
+    judgeloaded: function () {
+      if (this.judgeloaded === 0) {
+        this.loading = false
+      }
+    }
+  },
   methods: {
     gotoBack () { // 推出到列表则删除数据库
-      var indexDB = window.indexedDB
-      indexDB.deleteDatabase('kangruideIndexDB')
+      window.localStorage.judgeCloseLoadIndexDB = true
       window.localStorage.removeItem('file_obj')
       window.localStorage.removeItem('zipfile_index')
       this.$router.go(-1)
@@ -200,8 +207,6 @@ export default {
       return returnObj
     },
     getBaseData () {
-      var Zip = new JSZip()
-      console.log(Zip)
       var self = this
       // var url = 'http://xh.com/api/capital/asset_package?asset_id=' + this.$route.params.id + '&type=insurance_company&is_download=1'
       var url = '/static/lookview.zip'
@@ -229,13 +234,12 @@ export default {
       xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
           var file = xmlhttp.response || xmlhttp.responseText
-          console.log(file)
           JSZip.loadAsync(file).then(function (zip) {
-            console.log(zip)
             zip.forEach(function (relativePath, zipEntry) {
               var fileName = zipEntry.name
               // console.log(zipEntry.name)
               if (zipEntry.name.slice(zipEntry.name.length - 1) !== '/') {
+                self.judgeloaded++
                 // console.log(zip.folder(zipEntry.name))
                 zip.file(zipEntry.name).async('base64').then(function success (text) {
                   var indexDB = window.indexedDB
@@ -275,14 +279,8 @@ export default {
                         }
                       }
                       self.file_obj = JSON.parse(JSON.stringify(fileObj))
-                      // window.localStorage.file_obj = JSON.stringify(self.file_obj) // 存储文件对象树
-                      // window.localStorage.zipfile_index = JSON.stringify(self.zipfile_index) // 存储文件在数组中的索引对象
+                      self.judgeloaded--
                     }
-                    // var reque = objectStore.count() // 数据库访问方法
-                    // reque.onsuccess = function (event) {
-                    //   var count = event.target.result
-                    //   console.log(count)
-                    // }
                   }
                 }, function error (e) {
                 })

@@ -5,7 +5,7 @@
       <div class="admin_tool_btn">
         <el-button size="small" @click="gotoBack">
           <i class="fa-chevron-left"></i>
-          <span>返回</span>
+          <span>返回上一级</span>
         </el-button>
       </div>
       <div class="admin_location">
@@ -146,6 +146,7 @@ export default {
     getBaseData () {
       this.zipfile_index = JSON.parse(window.localStorage.zipfile_index) // 存储文件在数组中的索引对象
       this.curFileObjBranch = JSON.parse(window.localStorage.curFileObjBranch) // 获取当前文件对象分支
+      window.localStorage.judgeCloseLoadIndexDB = false // 设定判断关闭indexDB加载为false
     }
   }
 }
